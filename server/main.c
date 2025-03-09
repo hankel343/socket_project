@@ -43,5 +43,18 @@ int main() {
 
 	printf("Connection accepted from ip address: %s\n", inet_ntoa(client_addr.sin_addr));
 
+	// send a message to the client
+	const char *message = "Hello from the server!";
+	if (send(client_sockfd, message, strlen(message), 0) < 0) {
+		perror("send");
+		return 1;
+	}
+	
+	// close client socket
+	close(client_sockfd);
+
+	// close server socket
+	close(sockfd);
+
 	return 0;
 }
