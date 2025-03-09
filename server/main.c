@@ -31,27 +31,29 @@ int main() {
 		return 1;
 	}
 
-	// accept incoming connections
-	struct sockaddr_in client_addr;
-	socklen_t client_addr_len = sizeof(struct sockaddr_in);
-	int client_sockfd = accept(sockfd, (struct sockaddr*)&client_addr, &client_addr_len);
+	for (;;) {
+		// accept incoming connections
+		struct sockaddr_in client_addr;
+		socklen_t client_addr_len = sizeof(struct sockaddr_in);
+		int client_sockfd = accept(sockfd, (struct sockaddr*)&client_addr, &client_addr_len);
 
-	if (client_sockfd < 0) {
-		perror("accept");
-		return 1;
+		if (client_sockfd < 0) {
+			perror("accept");
+			return 1;
+		}
+
+		printf("Connection accepted from ip address: %s\n", inet_ntoa(client_addr.sin_addr));
+
+		// send a message to the client
+		const char *message = "Hello from the server!";
+		if (send(client_sockfd, message, strlen(message), 0) < 0) {
+			perror("send");
+			return 1;
+		}
+
+		// close client socket
+		close(client_sockfd);
 	}
-
-	printf("Connection accepted from ip address: %s\n", inet_ntoa(client_addr.sin_addr));
-
-	// send a message to the client
-	const char *message = "Hello from the server!";
-	if (send(client_sockfd, message, strlen(message), 0) < 0) {
-		perror("send");
-		return 1;
-	}
-	
-	// close client socket
-	close(client_sockfd);
 
 	// close server socket
 	close(sockfd);
