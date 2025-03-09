@@ -1,4 +1,4 @@
-# socket_project
+# Socket Programming
 
 I created this project to do something with the Raspberry Pi 4B I have had sitting around for three years. It is a simple client-server program. The server runs on the Raspberry Pi and sends a message to the connecting client.
 
