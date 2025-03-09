@@ -17,12 +17,5 @@ int main(int argc, char** argv) {
 
 	memset(&addr, 0, sizeof(struct addrinfo));
 
-// 	status = getsockopt(sockfd, SOL_SOCKET, SO_SNDBUF, &optval, &optlen);
-// 
-// 	if ( status != 0 ) {
-// 		perror("getsockopt");
-// 		return 1;
-// 	}
-
 	return 0;
 }
