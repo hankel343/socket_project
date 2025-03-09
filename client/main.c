@@ -5,7 +5,16 @@
 #include <string.h>
 #include <stdio.h>
 
-int main() {
+int main(int argc, char *argv[]) {
+
+    if (argc != 3) {
+        fprintf(stderr, "Usage: %s <server_ip> <command>\n", argv[0]);
+        return 1;
+    }
+
+    const char *server_ip = argv[1];
+    const char *command = argv[2];
+
     int sockfd;
     struct sockaddr_in server_addr;
 
@@ -20,7 +29,7 @@ int main() {
     memset(&server_addr, 0, sizeof(struct sockaddr_in));
     server_addr.sin_family = AF_INET;
     server_addr.sin_port = htons(8080);
-    server_addr.sin_addr.s_addr = inet_addr("192.168.1.122");
+    server_addr.sin_addr.s_addr = inet_addr(server_ip);
 
     // connect to the server
     if (connect(sockfd, (struct sockaddr*) &server_addr, sizeof(struct sockaddr_in)) < 0) {
@@ -29,6 +38,13 @@ int main() {
     }
 
     printf("Client successfully connected to the server.\n");
+
+    // send command to the server
+    if (send(sockfd, command, strlen(command), 0) < 0) {
+        perror("send");
+        close(sockfd);
+        return 1;
+    }
 
     // receive a message from the server
     char buffer[1024];
