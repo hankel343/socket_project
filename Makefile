@@ -21,15 +21,19 @@ CFLAGS = -Wall -Wextra -Werror
 all: $(SERVER_BIN) $(CLIENT_BIN)
 
 $(BUILD_DIR):
-    mkdir -p $(BUILD_DIR)
+    # Ensure the build directory exists
+	mkdir -p $(BUILD_DIR)
 
 $(SERVER_BIN): $(SERVER_SRC) | $(BUILD_DIR)
-    $(CC) $(CFLAGS) -o $@ $<
+    # Compile the server source file
+	$(CC) $(CFLAGS) -o $@ $<
 
 $(CLIENT_BIN): $(CLIENT_SRC) | $(BUILD_DIR)
-    $(CC) $(CFLAGS) -o $@ $<
+    # Compile the client source file
+	$(CC) $(CFLAGS) -o $@ $<
 
 clean:
-    rm -rf $(BUILD_DIR)
+    # Remove the build directory
+	rm -rf $(BUILD_DIR)
 
 .PHONY: all clean
