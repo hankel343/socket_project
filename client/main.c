@@ -31,7 +31,7 @@ int main() {
     printf("Client successfully connected to the server.\n");
 
     // receive a message from the server
-    char buffer[256];
+    char buffer[1024];
     int bytes_received = recv(sockfd, buffer, sizeof(buffer) - 1, 0);
 
     if (bytes_received < 0) {
