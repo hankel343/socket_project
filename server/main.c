@@ -41,7 +41,7 @@ int main() {
 		return 1;
 	}
 
-	printf("Connection accepted.\n");
+	printf("Connection accepted from ip address: %s\n", inet_ntoa(client_addr.sin_addr));
 
 	return 0;
 }
