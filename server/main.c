@@ -76,7 +76,7 @@ int main() {
 			}
 		}
 		
-		printf("%d bytes sent to client.\n", bytes_read);
+		printf("%zu bytes sent to client.\n", bytes_read);
 		// close the popen file descriptor
 		pclose(fp);
 
