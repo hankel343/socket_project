@@ -67,6 +67,7 @@ int main() {
 		// read the output from the top command
 		char buffer[1024];
 		size_t bytes_read;
+		size_t total_bytes_sent = 0;
 		while ((bytes_read = fread(buffer, 1, sizeof(buffer), fp)) > 0) {
 			
 			// send the output to the client
@@ -74,9 +75,10 @@ int main() {
 				perror("send");
 				break;
 			}
+			total_bytes_sent += bytes_read;
 		}
 		
-		printf("%zu bytes sent to client.\n", bytes_read);
+		printf("Total %zu bytes sent to client.\n", total_bytes_sent);
 		// close the popen file descriptor
 		pclose(fp);
 
