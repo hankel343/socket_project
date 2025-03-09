@@ -64,7 +64,7 @@ I created this project to do something with the Raspberry Pi 4B I have had sitti
 
 ## License
 
-This project is licensed under the MIT License. See the LICENSE file for details.
+This project is licensed under the MIT License.
 
 MIT License
 
