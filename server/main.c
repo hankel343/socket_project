@@ -44,12 +44,28 @@ int main() {
 
 		printf("Connection accepted from ip address: %s\n", inet_ntoa(client_addr.sin_addr));
 
-		// send a message to the client
-		const char *message = "Hello from the server!";
-		if (send(client_sockfd, message, strlen(message), 0) < 0) {
-			perror("send");
-			return 1;
+		// execute the top command and capture its output
+		FILE *fp = popen("top -b -n 1", "r");
+		if (fp == NULL) {
+			perror("popen");
+			close(client_sockfd);
+			continue;
 		}
+
+		// read the output from the top command
+		char buffer[1024];
+		size_t bytes_read;
+		while ((bytes_read = fread(buffer, 1, sizeof(buffer), fp)) > 0) {
+			
+			// send the output to the client
+			if (send(client_sockfd, buffer, bytes_read, 0) < 0) {
+				perror("send");
+				break;
+			}
+		}
+
+		// close the popen file descriptor
+		pclose(fp);
 
 		// close client socket
 		close(client_sockfd);
