@@ -98,45 +98,6 @@ int main() {
 			close(client_sockfd);
 
 		}
-
-		// receive the command from the client
-		char command[256];
-		int bytes_received = recv(client_sockfd, command, sizeof(command) - 1, 0);
-		if (bytes_received < 0) {
-			perror("recv");
-			close(client_sockfd);
-			continue;
-		}
-		command[bytes_received] = '\0';
-
-		// execute the top command and capture its output
-		FILE *fp = popen(command, "r");
-		if (fp == NULL) {
-			perror("popen");
-			close(client_sockfd);
-			continue;
-		}
-
-		// read the output from the top command
-		char buffer[1024];
-		size_t bytes_read;
-		size_t total_bytes_sent = 0;
-		while ((bytes_read = fread(buffer, 1, sizeof(buffer), fp)) > 0) {
-			
-			// send the output to the client
-			if (send(client_sockfd, buffer, bytes_read, 0) < 0) {
-				perror("send");
-				break;
-			}
-			total_bytes_sent += bytes_read;
-		}
-		
-		printf("Total %zu bytes sent to client.\n", total_bytes_sent);
-		// close the popen file descriptor
-		pclose(fp);
-
-		// close client socket
-		close(client_sockfd);
 	}
 
 	// close server socket
