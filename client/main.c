@@ -49,6 +49,8 @@ int main(int argc, char *argv[]) {
     // receive a message from the server
     char buffer[4096];
     int bytes_received;
+    
+    printf("Message from the server: %s\n", buffer);
     while ((bytes_received = recv(sockfd, buffer, sizeof(buffer) - 1, 0)) > 0) {
         buffer[bytes_received] = '\0';
         printf("%s", buffer);
@@ -61,7 +63,6 @@ int main(int argc, char *argv[]) {
 
     // null-terminate the received data
     buffer[bytes_received] = '\0';
-    printf("Message from the server: %s\n", buffer);
 
     // close socket
     close(sockfd);
