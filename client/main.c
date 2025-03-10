@@ -49,8 +49,8 @@ int main(int argc, char *argv[]) {
     // receive a message from the server
     char buffer[4096];
     int bytes_received;
-    
-    printf("Message from the server: %s\n", buffer);
+
+    printf("Message from the server:\n", buffer);
     while ((bytes_received = recv(sockfd, buffer, sizeof(buffer) - 1, 0)) > 0) {
         buffer[bytes_received] = '\0';
         printf("%s", buffer);
