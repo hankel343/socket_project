@@ -46,6 +46,59 @@ int main() {
 
 		printf("Connection accepted from ip address: %s\n", inet_ntoa(client_addr.sin_addr));
 
+		pid_t pid = fork();
+		if (pid < 0) {
+			perror("fork");
+			close(client_sockfd);
+			continue;
+		}
+
+		if (pid == 0) {
+			close(sockfd);
+
+			char command[256];
+			int bytes_received = recv(client_sockfd, command, sizeof(command) - 1, 0);
+			
+			if (bytes_received < 0) {
+				perror("recv");
+				close(client_sockfd);
+				return 1;
+			}
+
+			command[bytes_received] = '\0';
+
+			// execute command and capture output
+			FILE *fp = popen(command, "r");
+			if (fp == NULL) {
+				perror("popen");
+				close(client_sockfd);
+				_exit(1);
+			}
+
+			// read output from command
+			char buffer[1024];
+			ssize_t bytes_read;
+			ssize_t total_bytes_sent = 0;
+			while ((bytes_read = fread(buffer, 1, sizeof(buffer), fp)) > 0) {
+				if (send(client_sockfd, buffer, bytes_read, 0) < 0) {
+					perror("send");
+					break;
+				}
+				total_bytes_sent += bytes_read;
+			}
+
+			printf("Total %zd bytes sent to client.\n", total_bytes_sent);
+			pclose(fp);
+			close(client_sockfd);
+			_exit(0);
+
+		} else {
+
+			// Parent process: close the client socket and continue to accept new connections
+			close(client_sockfd);
+
+		}
+
 		// receive the command from the client
 		char command[256];
 		int bytes_received = recv(client_sockfd, command, sizeof(command) - 1, 0);
